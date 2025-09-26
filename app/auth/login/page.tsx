@@ -53,14 +53,14 @@ export default function LoginPage() {
             <Sparkles className="h-8 w-8 text-primary mr-3 animate-spin" />
             <h1 className="text-3xl font-bold gradient-text">What2Do</h1>
           </div>
-          <p className="text-muted-foreground">Connectez-vous à votre compte</p>
+          <p className="text-muted-foreground">Bon retour parmi nous !</p>
         </div>
 
         <Card className="border-0 shadow-xl card-hover bg-card/80 backdrop-blur">
           <CardHeader>
-            <CardTitle className="text-2xl text-center gradient-text">Connexion</CardTitle>
+            <CardTitle className="text-2xl text-center gradient-text">Retrouvez Vos Événements</CardTitle>
             <CardDescription className="text-center">
-              Entrez vos identifiants pour accéder à votre compte
+              Accédez à votre univers d'expériences en quelques secondes
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -70,7 +70,7 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="votre@email.com"
+                  placeholder="mon.email@exemple.com"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -94,13 +94,13 @@ export default function LoginPage() {
                 </div>
               )}
               <Button type="submit" className="w-full h-12 text-base warm-glow" disabled={isLoading}>
-                {isLoading ? "Connexion..." : "Se connecter"}
+                {isLoading ? "Connexion en cours..." : "Accéder à Mes Événements"}
               </Button>
             </form>
             <div className="mt-6 text-center text-sm">
-              <span className="text-muted-foreground">Pas encore de compte ? </span>
+              <span className="text-muted-foreground">Première visite ? </span>
               <Link href="/auth/sign-up" className="text-primary hover:underline font-medium">
-                Créer un compte
+                Créer mon compte gratuitement
               </Link>
             </div>
           </CardContent>

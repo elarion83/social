@@ -73,18 +73,18 @@ export default function SignUpPage() {
             <Sparkles className="h-8 w-8 text-primary mr-3 animate-spin" />
             <h1 className="text-3xl font-bold gradient-text">What2Do</h1>
           </div>
-          <p className="text-muted-foreground">Créez votre compte gratuitement</p>
+          <p className="text-muted-foreground">Votre première expérience commence ici</p>
         </div>
 
         <Card className="border-0 shadow-xl card-hover bg-card/80 backdrop-blur">
           <CardHeader>
-            <CardTitle className="text-2xl text-center gradient-text">Inscription</CardTitle>
-            <CardDescription className="text-center">Rejoignez la communauté What2Do</CardDescription>
+            <CardTitle className="text-2xl text-center gradient-text">Créez Votre Premier Événement</CardTitle>
+            <CardDescription className="text-center">Rejoignez 10,000+ créateurs en moins de 2 minutes</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSignUp} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="fullName">Nom complet</Label>
+                <Label htmlFor="fullName">Comment vous appeler ?</Label>
                 <Input
                   id="fullName"
                   type="text"
@@ -96,11 +96,11 @@ export default function SignUpPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Votre email</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="votre@email.com"
+                  placeholder="mon.email@exemple.com"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -108,7 +108,7 @@ export default function SignUpPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Mot de passe</Label>
+                <Label htmlFor="password">Mot de passe sécurisé</Label>
                 <Input
                   id="password"
                   type="password"
@@ -120,7 +120,7 @@ export default function SignUpPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+                <Label htmlFor="confirmPassword">Confirmez votre mot de passe</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
@@ -137,13 +137,13 @@ export default function SignUpPage() {
                 </div>
               )}
               <Button type="submit" className="w-full h-12 text-base warm-glow" disabled={isLoading}>
-                {isLoading ? "Création du compte..." : "Créer mon compte"}
+                {isLoading ? "Création de votre compte..." : "Créer Mon Premier Événement Gratuitement"}
               </Button>
             </form>
             <div className="mt-6 text-center text-sm">
-              <span className="text-muted-foreground">Déjà un compte ? </span>
+              <span className="text-muted-foreground">Déjà membre ? </span>
               <Link href="/auth/login" className="text-primary hover:underline font-medium">
-                Se connecter
+                Accéder à mon compte
               </Link>
             </div>
           </CardContent>

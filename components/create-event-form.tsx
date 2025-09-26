@@ -69,22 +69,46 @@ export function CreateEventForm() {
     try {
       const {
         data: { user },
+        error: userError,
       } = await supabase.auth.getUser()
+
+      if (userError) {
+        throw new Error("Erreur d'authentification: " + userError.message)
+      }
 
       if (!user) {
         throw new Error("Vous devez être connecté pour créer un événement")
       }
 
+      if (!formData.title.trim()) {
+        throw new Error("Le titre est obligatoire")
+      }
+      if (!formData.category) {
+        throw new Error("La catégorie est obligatoire")
+      }
+      if (!formData.type) {
+        throw new Error("Le type d'événement est obligatoire")
+      }
+      if (!formData.start_date) {
+        throw new Error("La date de début est obligatoire")
+      }
+      if (!formData.end_date) {
+        throw new Error("La date de fin est obligatoire")
+      }
+
+      console.log("[v0] Creating event with user ID:", user.id)
+      console.log("[v0] Event data:", formData)
+
       const eventData = {
-        title: formData.title,
-        description: formData.description,
-        short_description: formData.short_description,
+        title: formData.title.trim(),
+        description: formData.description.trim() || null,
+        short_description: formData.short_description.trim() || null,
         category: formData.category,
         type: formData.type,
-        venue_name: locationData.venue_name || null,
-        address: locationData.address || null,
-        city: locationData.city || null,
-        country: locationData.country || null,
+        venue_name: locationData.venue_name?.trim() || null,
+        address: locationData.address?.trim() || null,
+        city: locationData.city?.trim() || null,
+        country: locationData.country?.trim() || null,
         latitude: locationData.latitude || null,
         longitude: locationData.longitude || null,
         start_date: formData.start_date,
@@ -92,19 +116,32 @@ export function CreateEventForm() {
         max_attendees: formData.max_attendees ? Number.parseInt(formData.max_attendees) : null,
         price: formData.price ? Number.parseFloat(formData.price) : 0,
         currency: formData.currency,
-        image_url: formData.image_url || null,
-        external_url: formData.external_url || null,
-        tags: formData.tags ? formData.tags.split(",").map((tag) => tag.trim()) : [],
+        image_url: formData.image_url?.trim() || null,
+        external_url: formData.external_url?.trim() || null,
+        tags: formData.tags
+          ? formData.tags
+              .split(",")
+              .map((tag) => tag.trim())
+              .filter(Boolean)
+          : [],
         organizer_id: user.id,
         status: "published",
+        current_attendees: 0,
       }
+
+      console.log("[v0] Inserting event data:", eventData)
 
       const { data, error } = await supabase.from("events").insert([eventData]).select().single()
 
-      if (error) throw error
+      if (error) {
+        console.log("[v0] Supabase error:", error)
+        throw new Error(`Erreur lors de la création: ${error.message}`)
+      }
 
+      console.log("[v0] Event created successfully:", data)
       router.push(`/events/${data.id}`)
     } catch (error: unknown) {
+      console.log("[v0] Error in handleSubmit:", error)
       setError(error instanceof Error ? error.message : "Une erreur est survenue")
     } finally {
       setIsLoading(false)

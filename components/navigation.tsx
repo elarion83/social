@@ -136,9 +136,9 @@ export function Navigation() {
                             href="/events"
                           >
                             <Search className="h-6 w-6 text-primary" />
-                            <div className="mb-2 mt-4 text-lg font-medium">Tous les événements</div>
+                            <div className="mb-2 mt-4 text-lg font-medium">Trouvez Votre Bonheur</div>
                             <p className="text-sm leading-tight text-muted-foreground">
-                              Découvrez tous les événements disponibles
+                              Des milliers d'expériences vous attendent
                             </p>
                           </Link>
                         </NavigationMenuLink>
@@ -178,15 +178,27 @@ export function Navigation() {
             </Link>
 
             {user && (
-              <Link
-                href="/feed"
-                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === "/feed" ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                <Users className="h-4 w-4" />
-                Feed
-              </Link>
+              <>
+                <Link
+                  href="/feed"
+                  className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${
+                    pathname === "/feed" ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  <Users className="h-4 w-4" />
+                  Mes Découvertes
+                </Link>
+
+                <Link
+                  href="/participant-dashboard"
+                  className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${
+                    pathname === "/participant-dashboard" ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  <Calendar className="h-4 w-4" />
+                  Mon Univers
+                </Link>
+              </>
             )}
           </div>
 
@@ -197,7 +209,7 @@ export function Navigation() {
                 <Button asChild size="sm" className="accent-button">
                   <Link href="/create-event">
                     <Plus className="h-4 w-4 mr-2" />
-                    Créer
+                    Lancer Mon Événement
                   </Link>
                 </Button>
                 <DropdownMenu>
@@ -226,25 +238,33 @@ export function Navigation() {
                     <DropdownMenuItem asChild>
                       <Link href="/profile" className="cursor-pointer">
                         <Settings className="mr-2 h-4 w-4" />
-                        Mon profil
+                        Mon Profil
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/dashboard" className="cursor-pointer">
                         <Calendar className="mr-2 h-4 w-4" />
-                        Dashboard
+                        Mes Événements
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/settings" className="cursor-pointer">
                         <Settings className="mr-2 h-4 w-4" />
-                        Paramètres
+                        Mon Compte
                       </Link>
                     </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild>
+                      <Link href="/participant-dashboard" className="cursor-pointer">
+                        <Users className="mr-2 h-4 w-4" />
+                        Mon Univers
+                      </Link>
+                    </DropdownMenuItem>
+
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
                       <LogOut className="mr-2 h-4 w-4" />
-                      Se déconnecter
+                      Quitter
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -252,10 +272,10 @@ export function Navigation() {
             ) : (
               <div className="flex items-center gap-2">
                 <Button asChild variant="ghost">
-                  <Link href="/auth/login">Se connecter</Link>
+                  <Link href="/auth/login">Connexion</Link>
                 </Button>
                 <Button asChild className="accent-button">
-                  <Link href="/auth/sign-up">S'inscrire</Link>
+                  <Link href="/auth/sign-up">Rejoindre Gratuitement</Link>
                 </Button>
               </div>
             )}
