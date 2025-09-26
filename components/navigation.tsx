@@ -235,7 +235,11 @@ export function Navigation() {
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Button
+                      variant="ghost"
+                      className="relative h-8 w-8 rounded-full"
+                      onClick={() => console.log("[v0] Avatar button clicked")}
+                    >
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={profile?.avatar_url || "/placeholder.svg"} />
                         <AvatarFallback>
@@ -248,7 +252,12 @@ export function Navigation() {
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuContent
+                    className="w-56"
+                    align="end"
+                    forceMount
+                    onOpenChange={(open) => console.log("[v0] Dropdown menu open state:", open)}
+                  >
                     <div className="flex items-center justify-start gap-2 p-2">
                       <div className="flex flex-col space-y-1 leading-none">
                         <p className="font-medium">{profile?.full_name || "Utilisateur"}</p>
