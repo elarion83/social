@@ -5,8 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ProfileCompletion } from "@/components/profile/profile-completion"
 import Link from "next/link"
-import { Calendar, MapPin, Users, Settings, Edit, Globe, MapPinIcon } from "lucide-react"
+import { Calendar, MapPin, Users, Settings, Edit, Globe, MapPinIcon, Shield } from "lucide-react"
 
 export default async function ProfilePage() {
   const supabase = await createClient()
@@ -63,6 +64,11 @@ export default async function ProfilePage() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
+          {/* Profile Completion */}
+          <div className="mb-6">
+            <ProfileCompletion profile={profile} />
+          </div>
+
           {/* Profile Header */}
           <Card className="mb-8">
             <CardContent className="p-8">
@@ -130,6 +136,12 @@ export default async function ProfilePage() {
                       <Link href="/settings">
                         <Settings className="h-4 w-4 mr-2" />
                         Paramètres
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="bg-transparent">
+                      <Link href="/profile/privacy">
+                        <Shield className="h-4 w-4 mr-2" />
+                        Confidentialité
                       </Link>
                     </Button>
                   </div>

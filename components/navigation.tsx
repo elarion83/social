@@ -38,6 +38,7 @@ import {
   MoreHorizontal,
   Map,
   Search,
+  MessageCircle,
 } from "lucide-react"
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
@@ -180,6 +181,26 @@ export function Navigation() {
             {user && (
               <>
                 <Link
+                  href="/circles"
+                  className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${
+                    pathname?.startsWith("/circles") ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  <Users className="h-4 w-4" />
+                  Mes Cercles
+                </Link>
+
+                <Link
+                  href="/messages"
+                  className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${
+                    pathname?.startsWith("/messages") ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Messages
+                </Link>
+
+                <Link
                   href="/feed"
                   className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${
                     pathname === "/feed" ? "text-primary" : "text-muted-foreground"
@@ -248,16 +269,21 @@ export function Navigation() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
+                      <Link href="/circles" className="cursor-pointer">
+                        <Users className="mr-2 h-4 w-4" />
+                        Mes Cercles
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/messages" className="cursor-pointer">
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        Messages
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link href="/settings" className="cursor-pointer">
                         <Settings className="mr-2 h-4 w-4" />
                         Mon Compte
-                      </Link>
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem asChild>
-                      <Link href="/participant-dashboard" className="cursor-pointer">
-                        <Users className="mr-2 h-4 w-4" />
-                        Mon Univers
                       </Link>
                     </DropdownMenuItem>
 

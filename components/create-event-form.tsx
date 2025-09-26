@@ -1,8 +1,9 @@
 "use client"
 
-import type React from "react"
+import { useSearchParams } from "next/navigation"
 
-import { useState } from "react"
+import type React from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -13,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar, Users, Euro, ImageIcon } from "lucide-react"
 import { LocationPicker } from "@/components/location-picker"
+import { Link } from "next/link"
 
 const categories = [
   { value: "concert", label: "Concert" },
@@ -32,8 +34,10 @@ const eventTypes = [
 
 export function CreateEventForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [circles, setCircles] = useState<any[]>([])
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -48,16 +52,30 @@ export function CreateEventForm() {
     image_url: "",
     external_url: "",
     tags: "",
+    circle_id: searchParams?.get("circle") || "",
+    visibility: "public",
   })
 
-  const [locationData, setLocationData] = useState({
-    venue_name: "",
-    address: "",
-    city: "",
-    country: "",
-    latitude: undefined as number | undefined,
-    longitude: undefined as number | undefined,
-  })
+  useEffect(() => {
+    const fetchCircles = async () => {
+      const supabase = createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (user) {
+        const { data } = await supabase
+          .from("circles")
+          .select("*")
+          .or(`creator_id.eq.${user.id},circle_members.user_id.eq.${user.id}`)
+          .order("name")
+
+        setCircles(data || [])
+      }
+    }
+
+    fetchCircles()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -105,12 +123,12 @@ export function CreateEventForm() {
         short_description: formData.short_description.trim() || null,
         category: formData.category,
         type: formData.type,
-        venue_name: locationData.venue_name?.trim() || null,
-        address: locationData.address?.trim() || null,
-        city: locationData.city?.trim() || null,
-        country: locationData.country?.trim() || null,
-        latitude: locationData.latitude || null,
-        longitude: locationData.longitude || null,
+        venue_name: formData.venue_name?.trim() || null,
+        address: formData.address?.trim() || null,
+        city: formData.city?.trim() || null,
+        country: formData.country?.trim() || null,
+        latitude: formData.latitude || null,
+        longitude: formData.longitude || null,
         start_date: formData.start_date,
         end_date: formData.end_date,
         max_attendees: formData.max_attendees ? Number.parseInt(formData.max_attendees) : null,
@@ -124,6 +142,8 @@ export function CreateEventForm() {
               .map((tag) => tag.trim())
               .filter(Boolean)
           : [],
+        circle_id: formData.circle_id || null,
+        visibility: formData.visibility,
         organizer_id: user.id,
         status: "published",
         current_attendees: 0,
@@ -253,7 +273,7 @@ export function CreateEventForm() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <LocationPicker onLocationSelect={setLocationData} initialLocation={locationData} />
+          <LocationPicker onLocationSelect={setFormData} initialLocation={formData} />
         </CardContent>
       </Card>
 
@@ -371,6 +391,57 @@ export function CreateEventForm() {
               onChange={(e) => handleInputChange("external_url", e.target.value)}
             />
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Privacy & Visibility */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Visibilité et cercle
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="visibility">Qui peut voir cet événement ?</Label>
+            <Select value={formData.visibility} onValueChange={(value) => handleInputChange("visibility", value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Choisir la visibilité" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="public">🌍 Public - Visible par tous</SelectItem>
+                <SelectItem value="circle">👥 Cercle - Visible par les membres du cercle</SelectItem>
+                <SelectItem value="private">🔒 Privé - Visible par vous uniquement</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {formData.visibility === "circle" && (
+            <div className="space-y-2">
+              <Label htmlFor="circle_id">Cercle *</Label>
+              <Select value={formData.circle_id} onValueChange={(value) => handleInputChange("circle_id", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choisir un cercle" />
+                </SelectTrigger>
+                <SelectContent>
+                  {circles.map((circle) => (
+                    <SelectItem key={circle.id} value={circle.id}>
+                      {circle.is_private ? "🔒" : "🌍"} {circle.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {circles.length === 0 && (
+                <p className="text-sm text-muted-foreground">
+                  Vous devez d'abord créer un cercle pour utiliser cette option.{" "}
+                  <Link href="/circles/create" className="text-primary hover:underline">
+                    Créer un cercle
+                  </Link>
+                </p>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
 
